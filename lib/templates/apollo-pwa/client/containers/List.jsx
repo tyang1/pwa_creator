@@ -34,12 +34,16 @@ export default function reItemList(props) {
   const addTodoItem = (newItem) => {
     createTodo({
       variables: { name: newItem },
+      context: {
+        serializationKey: "Mutation",
+        tracked: true,
+      },
       optimisticResponse: {
         __typename: "Mutation",
         createTodo: {
           __typename: "Todo",
           id: Math.round(Math.random() * -1000000),
-          name: "LALALA",
+          name: newItem,
           completed: false,
         },
       },
@@ -49,6 +53,7 @@ export default function reItemList(props) {
           query: READ_TODOS,
           data: { todos: todos.concat([createTodo]) },
         });
+        console.log("cacne", cache);
       },
     });
     // refetch();
